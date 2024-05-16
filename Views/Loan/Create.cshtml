@@ -1,0 +1,34 @@
+@model Loanapp.Models.Loans.LoanViewModel
+
+<h1>Add New Loan</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Principal">Principal:</label>
+        <input asp-for="Principal" class="form-control" />
+        <span asp-validation-for="Principal" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AmountToRepay">Amount to Repay:</label>
+        <input asp-for="AmountToRepay" class="form-control" />
+        <span asp-validation-for="AmountToRepay" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Tenure">Tenure:</label>
+        <input asp-for="Tenure" class="form-control" />
+        <span asp-validation-for="Tenure" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MonthlyPayment">Monthly Payment:</label>
+        <input asp-for="MonthlyPayment" class="form-control" />
+        <span asp-validation-for="MonthlyPayment" class="text-danger"></span>
+    </div>
+
+    <!-- Fixed interest rate -->
+    <div class="form-group">
+        <label>Interest:</label>
+        <input type="text" value="2.5%" class="form-control" readonly />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

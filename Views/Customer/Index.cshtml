@@ -1,0 +1,35 @@
+@model IEnumerable<Loanapp.Models.Customer>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Welcome To Vale Financial Services</h1>
+
+<style>
+    .link-container {
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+    }
+
+    .link-container a {
+        text-decoration: none;
+        color: #333;
+    }
+</style>
+
+<div style="display: flex;">
+    <div class="link-container">
+        <a asp-action="Create">New user? Register!</a>
+    </div>
+    <div class="link-container">
+        <a asp-action="Login">Have an account? Login</a>
+    </div>
+</div>
+
+
+
+            

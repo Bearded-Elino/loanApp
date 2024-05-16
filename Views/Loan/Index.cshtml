@@ -1,0 +1,36 @@
+@model List<Loanapp.Models.Loans.Loan>
+
+<h1>Dashboard</h1>
+
+@if (Model.Any())
+{
+    <table>
+        <thead>
+        <tr>
+            <th>Loan ID</th>
+            <th>Principal</th>
+            <th>Amount to Repay</th>
+            <th>Interest</th>
+            <th>Tenure</th>
+            <th>Monthly Payment</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var loan in Model)
+        {
+            <tr>
+                <td>@loan.Id</td>
+                <td>@loan.Principal</td>
+                <td>@loan.AmountToRepay</td>
+                <td>@loan.Interest</td>
+                <td>@loan.Tenure</td>
+                <td>@loan.MonthlyPayment</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No loans found.</p>
+}

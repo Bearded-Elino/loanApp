@@ -1,0 +1,73 @@
+@model Loanapp.Models.LoginViewModel
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form input[type="text"],
+        .form input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ffffff;
+            border-radius: 5px;
+        }
+
+        .form button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: blue;
+            color: #ccc;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form button[type="submit"]:hover {
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <div class="form">
+        <form asp-action="Login" method="post">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" />
+
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" />
+
+            <button type="submit">Login</button>
+        </form>
+
+        @foreach (var modelState in ViewData.ModelState.Values)
+        {
+        foreach (var error in modelState.Errors)
+        {
+        <div class="text-danger">@error.ErrorMessage</div>
+        }
+        }
+    </div>
+</div>
+</body>
+</html>
