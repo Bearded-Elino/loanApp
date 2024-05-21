@@ -1,6 +1,6 @@
 @model Loanapp.Models.Loans.LoanViewModel
 
-<h1 class="text-center">Provide Loan Details</h1>
+<h1 class="text-center">Fill in the following Loan Details</h1>
 <div asp-validation-summary="All"></div>
 
 <div class="d-flex justify-content-center align-items-center w-50">
@@ -20,17 +20,13 @@
                 <option value="1000000">$1,000,000</option>
                 <option value="1500000">$1,500,000</option>
                 <option value="2000000">$2,000,000</option>
-
-
-
-
             </select>
             <span asp-validation-for="Principal" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="AmountToRepay">Amount to Repay:</label>
-            <input asp-for="AmountToRepay" class="form-control" id="amountToRepayInput" readonly/>
+            <input asp-for="AmountToRepay" class="form-control" id="amountToRepayInput" readonly />
             <span asp-validation-for="AmountToRepay" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -39,20 +35,22 @@
             <span asp-validation-for="Tenure" class="text-danger"></span>
         </div>
 
-
         <div class="form-group">
             <label asp-for="MonthlyPayment">Monthly Payment:</label>
-            <input asp-for="MonthlyPayment" class="form-control" id="monthlyPaymentInput" readonly/>
+            <input asp-for="MonthlyPayment" class="form-control" id="monthlyPaymentInput" readonly />
             <span asp-validation-for="MonthlyPayment" class="text-danger"></span>
         </div>
 
         <!-- Fixed interest rate -->
         <div class="form-group">
             <label>Interest:</label>
-            <input type="text" value="2.5%" class="form-control" readonly/>
+            <input asp-for="Interest" class="form-control" value="2.5" readonly />
+            <span asp-validation-for="Interest" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary" asp-action="Index">Submit</button>
+        <input type="hidden" asp-for="CustomerId" value="@ViewData["CustomerId"]" />
+
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
 
@@ -78,7 +76,6 @@
             monthlyPayment = 0;
         }
 
-        // Update input fields
         document.getElementById('amountToRepayInput').value = amountToRepay.toFixed(2);
         document.getElementById('monthlyPaymentInput').value = monthlyPayment.toFixed(2);
     }

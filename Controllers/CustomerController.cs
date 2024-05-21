@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Loanapp.Data;
 using Loanapp.Models;
+using Loanapp.Utilities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
@@ -16,10 +17,12 @@ namespace Loanapp.Controllers
     public class CustomerController : Controller
     {
         private readonly LoanDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public CustomerController(LoanDbContext context)
+        public CustomerController(LoanDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: Customer
@@ -51,7 +54,8 @@ namespace Loanapp.Controllers
         {
             return View();
         }
-
+        
+        
         // POST: Customer/Create
         
         [HttpPost]
@@ -78,8 +82,13 @@ namespace Loanapp.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
+                _context.Customers.Add(customer);
                 await _context.SaveChangesAsync();
+
+                string subject = "Welcome to Loan App";
+                string body = $"Dear {customer.FirstName}, \n\nThank you for registering with LoanApp";
+                await _emailService.SendEmailAsync(customer.Email, subject, body);
+                    
                 return RedirectToAction(nameof(RegisterSuccess));
             }
 
@@ -196,6 +205,12 @@ namespace Loanapp.Controllers
                     _context.Customers.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
                 if (customer != null)
                 {
+                    HttpContext.Response.Cookies.Append("CustomerId", customer.Id.ToString(), new CookieOptions()
+                        {
+                            Expires = DateTimeOffset.UtcNow.AddMinutes(30)
+                        }
+                    );
+                    
                     return RedirectToAction("Index", "Loan");
                 }
 

@@ -1,5 +1,11 @@
 using Loanapp.Data;
+using Loanapp.Models.Smtp;
+using Loanapp.Utilities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +14,16 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<LoanDbContext>(options => options.UseMySQL(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

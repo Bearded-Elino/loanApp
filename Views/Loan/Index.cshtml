@@ -1,10 +1,35 @@
 @model List<Loanapp.Models.Loans.Loan>
+<style>
+    .loan-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .loan-table th, .loan-table td {
+        border: 1px solid #ddd;
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    .loan-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    .loan-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .loan-table tr:hover {
+        background-color: #ddd;
+    }
+</style>
 
 <h1>Dashboard</h1>
 
 @if (Model.Any())
 {
-    <table>
+    <table class="loan-table">
         <thead>
         <tr>
             <th>Loan ID</th>
@@ -20,11 +45,11 @@
         {
             <tr>
                 <td>@loan.Id</td>
-                <td>@loan.Principal</td>
-                <td>@loan.AmountToRepay</td>
-                <td>@loan.Interest</td>
-                <td>@loan.Tenure</td>
-                <td>@loan.MonthlyPayment</td>
+                <td>@loan.Principal.ToString("C")</td>
+                <td>@loan.AmountToRepay.ToString("C")</td>
+                <td>@loan.Interest.ToString("F2")%</td>
+                <td>@loan.Tenure.ToString("N1")</td>
+                <td>@loan.MonthlyPayment.ToString("C")</td>
             </tr>
         }
         </tbody>

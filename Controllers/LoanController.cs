@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Loanapp.Data;
 using Loanapp.Models;
 using Loanapp.Models.Loans;
+using Loanapp.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,27 +11,63 @@ namespace Loanapp.Controllers
     public class LoanController : Controller
     {
         private readonly LoanDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public LoanController(LoanDbContext context)
+        public LoanController(LoanDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
-        public IActionResult Index()
+        // public IActionResult Index()
+        // {
+        //     var loans = _context.Loans.ToList();
+        //     return View(loans);
+        // }
+        
+        public async Task<IActionResult> Index()
         {
-            var loans = _context.Loans.ToList();
-            return View(loans);
+            if (HttpContext.Request.Cookies.TryGetValue("CustomerId", out string customerIdString) && int.TryParse(customerIdString, out int customerId))
+            {
+                var loans = await _context.Loans.Where(l => l.CustomerId == customerId).ToListAsync();
+                return View(loans);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Customer");
+            }
         }
+
+
+        
 
         public IActionResult Create()
         {
+            if (HttpContext.Request.Cookies.TryGetValue("CustomerId", out string customerId))
+            {
+                ViewData["CustomerId"] = customerId;
+            }
+
+            else
+            {
+                return RedirectToAction("Login", "Customer");
+            }
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(LoanViewModel model)
+        public async Task<IActionResult> Create(LoanViewModel model)
         {
+            if (HttpContext.Request.Cookies.TryGetValue("CustomerId", out string customerId))
+            {
+                model.CustomerId = int.Parse(customerId);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Customer information not found");
+                return View(model);
+            }
             if (ModelState.IsValid)
             {
                 var customer = _context.Customers.FirstOrDefault(c => c.Id == model.CustomerId);
@@ -57,8 +94,12 @@ namespace Loanapp.Controllers
 
                 _context.Loans.Add(loan);
                 _context.SaveChanges();
-                
-                return RedirectToAction(nameof(Index));
+
+
+                string subject = "loan application created";
+                string body = $"Dear {customer.FirstName},\n\nYour loan application has been created successfully. Loan Details;\nPrincipal: {model.Principal}\nInterest: {model.Interest}%\nMonthly Payment: {model.MonthlyPayment}\nTenure: {model.Tenure} years";
+                await _emailService.SendEmailAsync(customer.Email, subject, body);
+                return RedirectToAction(nameof(System.Index));
             }
             return View();
         }

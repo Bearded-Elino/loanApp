@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Loanapp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4e2a1208c27c75a01c90c599a7c15be48dd2aaaf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3dfb04c110419b09dcb1f334d4f46fc231ca3254")]
 [assembly: System.Reflection.AssemblyProductAttribute("Loanapp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Loanapp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
